@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sorry Shruu ❤️</title>
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #ff758c, #ff7eb3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        text-align: center;
+        color: #333;
+        overflow: hidden;
+    }
+
+    .card {
+        background: white;
+        padding: 35px;
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        max-width: 420px;
+        animation: fadeIn 1.5s ease;
+    }
+
+    h1 {
+        color: #ff4d6d;
+        font-size: 28px;
+    }
+
+    p {
+        font-size: 16px;
+        line-height: 1.7;
+    }
+
+    button {
+        margin-top: 20px;
+        padding: 12px 22px;
+        border: none;
+        border-radius: 25px;
+        background: #ff4d6d;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #e8435c;
+    }
+
+    @keyframes fadeIn {
+        from {opacity: 0; transform: translateY(30px);}
+        to {opacity: 1; transform: translateY(0);}
+    }
+
+    .heart {
+        position: absolute;
+        color: rgba(255,255,255,0.6);
+        font-size: 20px;
+        animation: float 6s linear infinite;
+    }
+
+    @keyframes float {
+        from {transform: translateY(100vh);}
+        to {transform: translateY(-10vh);}
+    }
+</style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Shruu… I messed up ❤️</h1>
+
+    <p>
+        I know I didn’t wait for you…  
+        and that’s been stuck in my head ever since.
+    </p>
+
+    <p>
+        Because the truth is — you *always* wait for me.  
+        And somehow, the one time it mattered most…  
+        I didn’t do the same for you.
+    </p>
+
+    <p>
+        That’s not who I want to be for you, Shruu.  
+        You deserve someone who chooses you *every time* —  
+        not someone who makes you feel left behind.
+    </p>
+
+    <p>
+        I’m really, really sorry 🥺  
+        And I promise… next time, I’ll be the one waiting.
+    </p>
+
+    <button onclick="showLove()">Tap this please 💖</button>
+
+    <p id="hiddenMessage" style="display:none; margin-top:15px; font-weight:bold;">
+        I love you, Shruu.  
+        Please forgive me? 🥺❤️
+    </p>
+</div>
+
+<script>
+function showLove() {
+    document.getElementById("hiddenMessage").style.display = "block";
+}
+
+// floating hearts
+for (let i = 0; i < 20; i++) {
+    let heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+    document.body.appendChild(heart);
+}
+</script>
+
+</body>
+</html>
