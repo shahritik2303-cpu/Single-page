@@ -4,258 +4,173 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sorry Shruu ❤️</title>
+<title>Chat with Shruu ❤️</title>
 
 <style>
-* {
-    box-sizing: border-box;
-}
-
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #ff758c, #ff7eb3);
-    color: #333;
+    background: #ece5dd;
 }
 
-/* Container */
-.container {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-/* Card */
-.card {
-    background: white;
-    width: 100%;
+/* Chat container */
+.chat {
     max-width: 420px;
-    padding: 28px 22px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    text-align: center;
-    transition: all 0.3s ease;
+    margin: auto;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Title */
-h1 {
-    margin: 0 0 10px;
-    font-size: 22px;
-    color: #ff4d6d;
+/* Header */
+.header {
+    background: #075e54;
+    color: white;
+    padding: 15px;
+    font-weight: bold;
 }
 
-/* Text */
-p {
-    font-size: 15.5px;
-    line-height: 1.6;
-    min-height: 70px;
-}
-
-/* Image */
-img {
-    width: 100%;
-    border-radius: 14px;
-    margin-top: 14px;
-}
-
-/* Buttons */
-.buttons {
-    margin-top: 15px;
+/* Messages */
+.messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-button {
+/* Bubbles */
+.msg {
+    max-width: 75%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 14.5px;
+    line-height: 1.4;
+}
+
+.sent {
+    align-self: flex-end;
+    background: #dcf8c6;
+}
+
+.received {
+    align-self: flex-start;
+    background: white;
+}
+
+/* Image */
+.msg img {
     width: 100%;
-    padding: 12px;
-    border-radius: 25px;
+    border-radius: 10px;
+    margin-top: 5px;
+}
+
+/* Buttons */
+.buttons {
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 20px;
     border: none;
-    font-size: 15px;
-    cursor: pointer;
+    font-size: 14px;
 }
 
-.yes {
-    background: #ff4d6d;
-    color: white;
-}
+.yes { background: #25d366; color: white; }
+.no { background: #ddd; }
 
-.no {
-    background: #eee;
-}
-
-/* Hearts */
-.heart {
-    position: fixed;
-    font-size: 18px;
-    color: rgba(255,255,255,0.7);
-    animation: float 5s linear infinite;
-}
-
-@keyframes float {
-    from { transform: translateY(100vh); }
-    to { transform: translateY(-10vh); }
-}
 </style>
 </head>
 
 <body>
 
-<div class="container">
-<div class="card">
+<div class="chat">
 
-    <h1>Hey Shruu… 🥺</h1>
-    <p id="text"></p>
+    <div class="header">Shruu ❤️</div>
 
-    <img id="photo" style="display:none;">
+    <div class="messages" id="messages"></div>
 
     <div class="buttons" id="buttons"></div>
 
 </div>
-</div>
 
 <script>
 
-const steps = [
-    {
-        text: "Can I ask you something?",
-        buttons: ["Okay"]
-    },
-    {
-        text: "Did it hurt when I didn’t wait for you?",
-        buttons: ["Yes…"]
-    },
-    {
-        text: "Seeing you smile like this… and knowing I was the reason that smile faded that day… it honestly hurts me 💔",
-        img: "photo1.jpg",
-        buttons: ["Continue"]
-    },
-    {
-        text: "Moments like this… being close to you… they mean everything to me. And I hate that I made you feel otherwise 🥺",
-        img: "photo2.jpg",
-        buttons: ["Hmm…"]
-    },
-    {
-        text: "Because you always wait for me… no matter what… and I didn’t do the same that day.",
-        buttons: ["..."]
-    },
-    {
-        text: "But you do matter to me, Shruu. More than I show sometimes ❤️",
-        buttons: ["Okay…"]
-    },
-    {
-        text: "I’m really, really sorry, Shruu… 🥺 I promise next time, I’ll be the one waiting for you.",
-        buttons: ["One last thing?"]
-    },
-    {
-        text: "Will you forgive me? 💖",
-        buttons: ["Yes ❤️", "No 🙈"]
-    }
+const chat = [
+    { text: "Hey Shruu… 🥺", type: "sent" },
+    { text: "Can I ask you something?", type: "sent" },
+    { text: "Did it hurt when I didn’t wait for you?", type: "sent" },
+    { text: "Seeing you smile like this… and knowing I was the reason that smile faded that day… it honestly hurts me 💔", type: "sent", img: "photo1.jpg" },
+    { text: "Moments like this… being close to you… they mean everything to me. And I hate that I made you feel otherwise 🥺", type: "sent", img: "photo2.jpg" },
+    { text: "Because you always wait for me… no matter what… and I didn’t do the same that day.", type: "sent" },
+    { text: "But you do matter to me, Shruu. More than I show sometimes ❤️", type: "sent" },
+    { text: "I’m really, really sorry… 🥺", type: "sent" },
+    { text: "I promise next time, I’ll be the one waiting for you.", type: "sent" },
+    { text: "Will you forgive me? 💖", type: "sent", final: true }
 ];
 
-let step = 0;
-let typing = false;
+let i = 0;
 
-function typeText(text) {
-    const el = document.getElementById("text");
-    el.innerHTML = "";
-    let i = 0;
-    typing = true;
+function addMessage(data) {
+    const msgDiv = document.createElement("div");
+    msgDiv.className = "msg " + data.type;
+    msgDiv.innerHTML = data.text;
 
-    function type() {
-        if (i < text.length) {
-            el.innerHTML += text.charAt(i);
-            i++;
-            setTimeout(type, 25);
-        } else {
-            typing = false;
-        }
-    }
-
-    type();
-}
-
-function loadStep() {
-    const data = steps[step];
-    const img = document.getElementById("photo");
-    const btnContainer = document.getElementById("buttons");
-
-    typeText(data.text);
-
-    // image
     if (data.img) {
+        const img = document.createElement("img");
         img.src = data.img;
-        img.style.display = "block";
-    } else {
-        img.style.display = "none";
+        msgDiv.appendChild(img);
     }
 
-    // buttons
-    btnContainer.innerHTML = "";
+    document.getElementById("messages").appendChild(msgDiv);
+    msgDiv.scrollIntoView({ behavior: "smooth" });
 
-    data.buttons.forEach((label, index) => {
-        const btn = document.createElement("button");
-        btn.innerText = label;
-
-        if (label.includes("Yes")) btn.classList.add("yes");
-        if (label.includes("No")) btn.classList.add("no");
-
-        btn.onclick = () => handleClick(label);
-
-        btnContainer.appendChild(btn);
-    });
-
-    if (data.buttons.includes("No 🙈")) {
-        setTimeout(moveNoButton, 300);
-    }
+    if (data.final) showButtons();
 }
 
-function handleClick(label) {
-    if (typing) return;
+function showButtons() {
+    const btns = document.getElementById("buttons");
 
-    if (label.includes("Yes") && step === steps.length - 1) {
-        forgive();
-    } else {
-        step++;
-        loadStep();
-    }
+    btns.innerHTML = `
+        <button class="yes" onclick="forgive()">Yes ❤️</button>
+        <button class="no" id="noBtn">No 🙈</button>
+    `;
+
+    moveNo();
 }
 
-function moveNoButton() {
-    const noBtn = document.querySelector(".no");
+function moveNo() {
+    const noBtn = document.getElementById("noBtn");
 
     function move() {
-        const x = Math.random() * 120 - 60;
-        const y = Math.random() * 80 - 40;
+        const x = Math.random() * 80 - 40;
+        const y = Math.random() * 30 - 15;
         noBtn.style.transform = `translate(${x}px, ${y}px)`;
     }
 
-    noBtn.addEventListener("touchstart", move);
     noBtn.addEventListener("mouseover", move);
+    noBtn.addEventListener("touchstart", move);
 }
 
 function forgive() {
-    document.querySelector(".card").innerHTML = `
-        <h1>YAYYY 😭❤️</h1>
-        <p>I love you so much, Shruu. Thank you for forgiving me 🥺</p>
-    `;
-    createHearts();
+    document.getElementById("buttons").innerHTML = "";
+    addMessage({ text: "YAYYY 😭❤️ Thank you for forgiving me 🥺 I love you", type: "sent" });
 }
 
-function createHearts() {
-    for (let i = 0; i < 25; i++) {
-        const h = document.createElement("div");
-        h.className = "heart";
-        h.innerHTML = "❤";
-        h.style.left = Math.random() * 100 + "vw";
-        h.style.animationDuration = (3 + Math.random() * 3) + "s";
-        document.body.appendChild(h);
+function startChat() {
+    if (i < chat.length) {
+        addMessage(chat[i]);
+        i++;
+        setTimeout(startChat, 1200);
     }
 }
 
-loadStep();
+startChat();
 
 </script>
 
