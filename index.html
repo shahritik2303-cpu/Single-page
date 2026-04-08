@@ -2,73 +2,95 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-
-<!-- ✅ IMPORTANT FOR MOBILE -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Sorry Shruu ❤️</title>
 
 <style>
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background: linear-gradient(135deg, #ff758c, #ff7eb3);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    color: #333;
+}
+
+/* Container */
+.container {
     min-height: 100vh;
-    padding: 15px;
-    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
 }
 
 /* Card */
 .card {
     background: white;
-    padding: 25px;
-    border-radius: 18px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     width: 100%;
     max-width: 420px;
+    padding: 28px 22px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     text-align: center;
+    transition: all 0.3s ease;
+}
+
+/* Title */
+h1 {
+    margin: 0 0 10px;
+    font-size: 22px;
+    color: #ff4d6d;
 }
 
 /* Text */
-h1 { 
-    color: #ff4d6d;
-    font-size: 22px;
-}
-
 p {
-    font-size: 15px;
-    min-height: 60px;
-    line-height: 1.5;
+    font-size: 15.5px;
+    line-height: 1.6;
+    min-height: 70px;
 }
-
-/* Buttons */
-button {
-    margin: 8px;
-    padding: 12px 18px;
-    border: none;
-    border-radius: 25px;
-    font-size: 15px;
-    cursor: pointer;
-}
-
-.yes { background: #ff4d6d; color: white; }
-.no { background: #ccc; position: relative; }
 
 /* Image */
 img {
     width: 100%;
-    border-radius: 12px;
-    margin-top: 12px;
+    border-radius: 14px;
+    margin-top: 14px;
+}
+
+/* Buttons */
+.buttons {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 25px;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.yes {
+    background: #ff4d6d;
+    color: white;
+}
+
+.no {
+    background: #eee;
 }
 
 /* Hearts */
 .heart {
     position: fixed;
-    color: rgba(255,255,255,0.7);
     font-size: 18px;
+    color: rgba(255,255,255,0.7);
     animation: float 5s linear infinite;
 }
 
@@ -76,28 +98,22 @@ img {
     from { transform: translateY(100vh); }
     to { transform: translateY(-10vh); }
 }
-
-/* 📱 Extra small devices */
-@media (max-width: 400px) {
-    h1 { font-size: 20px; }
-    p { font-size: 14px; }
-    button { font-size: 14px; padding: 10px 16px; }
-}
 </style>
 </head>
 
 <body>
 
-<!-- 🎵 Optional music -->
-<audio autoplay loop>
-    <source src="song.mp3" type="audio/mpeg">
-</audio>
-
+<div class="container">
 <div class="card">
+
     <h1>Hey Shruu… 🥺</h1>
     <p id="text"></p>
-    <div id="buttons"></div>
+
     <img id="photo" style="display:none;">
+
+    <div class="buttons" id="buttons"></div>
+
+</div>
 </div>
 
 <script>
@@ -105,79 +121,119 @@ img {
 const steps = [
     {
         text: "Can I ask you something?",
-        buttons: `<button class="yes" onclick="nextStep()">Okay</button>`
+        buttons: ["Okay"]
     },
     {
         text: "Did it hurt when I didn’t wait for you?",
-        buttons: `<button class="yes" onclick="nextStep()">Yes…</button>`
+        buttons: ["Yes…"]
     },
     {
         text: "Seeing you smile like this… and knowing I was the reason that smile faded that day… it honestly hurts me 💔",
-        buttons: `<button class="yes" onclick="nextStep()">Continue</button>`,
-        img: "photo1.jpg"
+        img: "photo1.jpg",
+        buttons: ["Continue"]
     },
     {
         text: "Moments like this… being close to you… they mean everything to me. And I hate that I made you feel otherwise 🥺",
-        buttons: `<button class="yes" onclick="nextStep()">Hmm…</button>`,
-        img: "photo2.jpg"
+        img: "photo2.jpg",
+        buttons: ["Hmm…"]
     },
     {
         text: "Because you always wait for me… no matter what… and I didn’t do the same that day.",
-        buttons: `<button class="yes" onclick="nextStep()">...</button>`
+        buttons: ["..."]
     },
     {
         text: "But you do matter to me, Shruu. More than I show sometimes ❤️",
-        buttons: `<button class="yes" onclick="nextStep()">Okay…</button>`
+        buttons: ["Okay…"]
     },
     {
         text: "I’m really, really sorry, Shruu… 🥺 I promise next time, I’ll be the one waiting for you.",
-        buttons: `<button class="yes" onclick="nextStep()">One last thing?</button>`
+        buttons: ["One last thing?"]
     },
     {
         text: "Will you forgive me? 💖",
-        buttons: `
-            <button class="yes" onclick="forgive()">Yes ❤️</button>
-            <button class="no" id="noBtn">No 🙈</button>
-        `
+        buttons: ["Yes ❤️", "No 🙈"]
     }
 ];
 
 let step = 0;
+let typing = false;
 
-function typeText(text, element) {
-    element.innerHTML = "";
+function typeText(text) {
+    const el = document.getElementById("text");
+    el.innerHTML = "";
     let i = 0;
-    let interval = setInterval(() => {
-        element.innerHTML += text[i];
-        i++;
-        if (i >= text.length) clearInterval(interval);
-    }, 25);
-}
+    typing = true;
 
-function nextStep() {
-    step++;
-    loadStep();
+    function type() {
+        if (i < text.length) {
+            el.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(type, 25);
+        } else {
+            typing = false;
+        }
+    }
+
+    type();
 }
 
 function loadStep() {
     const data = steps[step];
-    const textEl = document.getElementById("text");
-    const btnEl = document.getElementById("buttons");
-    const imgEl = document.getElementById("photo");
+    const img = document.getElementById("photo");
+    const btnContainer = document.getElementById("buttons");
 
-    typeText(data.text, textEl);
-    btnEl.innerHTML = data.buttons;
+    typeText(data.text);
 
+    // image
     if (data.img) {
-        imgEl.src = data.img;
-        imgEl.style.display = "block";
+        img.src = data.img;
+        img.style.display = "block";
     } else {
-        imgEl.style.display = "none";
+        img.style.display = "none";
     }
 
-    if (step === steps.length - 1) {
-        setTimeout(moveNoButton, 400);
+    // buttons
+    btnContainer.innerHTML = "";
+
+    data.buttons.forEach((label, index) => {
+        const btn = document.createElement("button");
+        btn.innerText = label;
+
+        if (label.includes("Yes")) btn.classList.add("yes");
+        if (label.includes("No")) btn.classList.add("no");
+
+        btn.onclick = () => handleClick(label);
+
+        btnContainer.appendChild(btn);
+    });
+
+    if (data.buttons.includes("No 🙈")) {
+        setTimeout(moveNoButton, 300);
     }
+}
+
+function handleClick(label) {
+    if (typing) return;
+
+    if (label.includes("Yes") && step === steps.length - 1) {
+        forgive();
+    } else {
+        step++;
+        loadStep();
+    }
+}
+
+function moveNoButton() {
+    const noBtn = document.querySelector(".no");
+
+    function move() {
+        const x = Math.random() * 120 - 60;
+        const y = Math.random() * 80 - 40;
+        noBtn.style.transform = `translate(${x}px, ${y}px)`;
+    }
+
+    noBtn.addEventListener("touchstart", move);
+    noBtn.addEventListener("mouseover", move);
 }
 
 function forgive() {
@@ -188,32 +244,17 @@ function forgive() {
     createHearts();
 }
 
-function moveNoButton() {
-    const noBtn = document.getElementById("noBtn");
-
-    // mobile-friendly movement
-    noBtn.addEventListener("touchstart", move);
-    noBtn.addEventListener("mouseover", move);
-
-    function move() {
-        const x = Math.random() * 150 - 75;
-        const y = Math.random() * 100 - 50;
-        noBtn.style.transform = `translate(${x}px, ${y}px)`;
-    }
-}
-
 function createHearts() {
     for (let i = 0; i < 25; i++) {
-        let heart = document.createElement("div");
-        heart.className = "heart";
-        heart.innerHTML = "❤";
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.animationDuration = (3 + Math.random() * 3) + "s";
-        document.body.appendChild(heart);
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.innerHTML = "❤";
+        h.style.left = Math.random() * 100 + "vw";
+        h.style.animationDuration = (3 + Math.random() * 3) + "s";
+        document.body.appendChild(h);
     }
 }
 
-// start
 loadStep();
 
 </script>
