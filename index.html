@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
+<!-- ✅ IMPORTANT FOR MOBILE -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Sorry Shruu ❤️</title>
 
 <style>
@@ -12,48 +16,59 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    padding: 15px;
+    box-sizing: border-box;
 }
 
+/* Card */
 .card {
     background: white;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    width: 100%;
     max-width: 420px;
     text-align: center;
 }
 
-h1 { color: #ff4d6d; }
-
-p {
-    font-size: 16px;
-    min-height: 60px;
+/* Text */
+h1 { 
+    color: #ff4d6d;
+    font-size: 22px;
 }
 
+p {
+    font-size: 15px;
+    min-height: 60px;
+    line-height: 1.5;
+}
+
+/* Buttons */
 button {
-    margin: 10px;
-    padding: 10px 18px;
+    margin: 8px;
+    padding: 12px 18px;
     border: none;
-    border-radius: 20px;
-    font-size: 16px;
+    border-radius: 25px;
+    font-size: 15px;
     cursor: pointer;
 }
 
 .yes { background: #ff4d6d; color: white; }
 .no { background: #ccc; position: relative; }
 
+/* Image */
 img {
     width: 100%;
-    border-radius: 15px;
-    margin-top: 15px;
+    border-radius: 12px;
+    margin-top: 12px;
 }
 
+/* Hearts */
 .heart {
-    position: absolute;
+    position: fixed;
     color: rgba(255,255,255,0.7);
-    font-size: 20px;
+    font-size: 18px;
     animation: float 5s linear infinite;
 }
 
@@ -61,18 +76,25 @@ img {
     from { transform: translateY(100vh); }
     to { transform: translateY(-10vh); }
 }
+
+/* 📱 Extra small devices */
+@media (max-width: 400px) {
+    h1 { font-size: 20px; }
+    p { font-size: 14px; }
+    button { font-size: 14px; padding: 10px 16px; }
+}
 </style>
 </head>
 
 <body>
 
-<!-- 🎵 OPTIONAL MUSIC -->
+<!-- 🎵 Optional music -->
 <audio autoplay loop>
     <source src="song.mp3" type="audio/mpeg">
 </audio>
 
 <div class="card">
-    <h1 id="title">Hey Shruu… 🥺</h1>
+    <h1>Hey Shruu… 🥺</h1>
     <p id="text"></p>
     <div id="buttons"></div>
     <img id="photo" style="display:none;">
@@ -90,26 +112,26 @@ const steps = [
         buttons: `<button class="yes" onclick="nextStep()">Yes…</button>`
     },
     {
-        text: "I knew it… and that’s what’s been bothering me the most 💔",
+        text: "Seeing you smile like this… and knowing I was the reason that smile faded that day… it honestly hurts me 💔",
         buttons: `<button class="yes" onclick="nextStep()">Continue</button>`,
         img: "photo1.jpg"
     },
     {
-        text: "Because you always wait for me… no matter what 🥺",
+        text: "Moments like this… being close to you… they mean everything to me. And I hate that I made you feel otherwise 🥺",
         buttons: `<button class="yes" onclick="nextStep()">Hmm…</button>`,
         img: "photo2.jpg"
     },
     {
-        text: "And I hate that I made you feel like you don’t matter the same way…",
+        text: "Because you always wait for me… no matter what… and I didn’t do the same that day.",
         buttons: `<button class="yes" onclick="nextStep()">...</button>`
     },
     {
-        text: "But you do, Shruu. You matter to me more than I show sometimes ❤️",
+        text: "But you do matter to me, Shruu. More than I show sometimes ❤️",
         buttons: `<button class="yes" onclick="nextStep()">Okay…</button>`
     },
     {
-        text: "I’m really, really sorry 🥺 I promise I’ll do better.",
-        buttons: `<button class="yes" onclick="nextStep()">Last question?</button>`
+        text: "I’m really, really sorry, Shruu… 🥺 I promise next time, I’ll be the one waiting for you.",
+        buttons: `<button class="yes" onclick="nextStep()">One last thing?</button>`
     },
     {
         text: "Will you forgive me? 💖",
@@ -129,7 +151,7 @@ function typeText(text, element) {
         element.innerHTML += text[i];
         i++;
         if (i >= text.length) clearInterval(interval);
-    }, 30);
+    }, 25);
 }
 
 function nextStep() {
@@ -154,7 +176,7 @@ function loadStep() {
     }
 
     if (step === steps.length - 1) {
-        setTimeout(moveNoButton, 500);
+        setTimeout(moveNoButton, 400);
     }
 }
 
@@ -169,11 +191,15 @@ function forgive() {
 function moveNoButton() {
     const noBtn = document.getElementById("noBtn");
 
-    noBtn.addEventListener("mouseover", () => {
-        const x = Math.random() * 200 - 100;
-        const y = Math.random() * 150 - 75;
+    // mobile-friendly movement
+    noBtn.addEventListener("touchstart", move);
+    noBtn.addEventListener("mouseover", move);
+
+    function move() {
+        const x = Math.random() * 150 - 75;
+        const y = Math.random() * 100 - 50;
         noBtn.style.transform = `translate(${x}px, ${y}px)`;
-    });
+    }
 }
 
 function createHearts() {
